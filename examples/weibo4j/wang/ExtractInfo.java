@@ -36,7 +36,7 @@ public class ExtractInfo {
 		String raw = FileHandler.readTXT(Constants.TXTFILEPATH
 				+ "weiboid_2000.txt");
 		String ids[] = raw.split("\r\n");
-		int start = 199;
+		int start = 0;
 		int count = 0;
 
 		for (String weiboId : ids) {

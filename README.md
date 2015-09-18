@@ -4,12 +4,12 @@
 
 In the file `src/config.properties`, fill in the app key and secret:
 
-client_ID=3722953941
-client_SERCRET=47cf202ca308ad73869992e1b5230b60
-redirect_URI=http://www.baidu.com
-baseURL=https://api.weibo.com/2/
-accessTokenURL=https://api.weibo.com/oauth2/access_token
-authorizeURL=https://api.weibo.com/oauth2/authorize
+    client_ID=3722953941
+    client_SERCRET=47cf202ca308ad73869992e1b5230b60
+    redirect_URI=http://www.baidu.com
+    baseURL=https://api.weibo.com/2/
+    accessTokenURL=https://api.weibo.com/oauth2/access_token
+    authorizeURL=https://api.weibo.com/oauth2/authorize
 
 The `redirect_UIR` must be the one specified in the Weibo App
 
@@ -19,7 +19,7 @@ The `redirect_UIR` must be the one specified in the Weibo App
 2. Right click the file `examples\weibo4j\examples\oauth2\OAuth4Code.java`, choose `Run as Java Application...`.
 3. On the `Console` panel, the following line will be displayed:
 
-> https://api.weibo.com/oauth2/authorize?client_id=3722953941&redirect_uri=http://www.baidu.com&response_type=code Hit enter when it's done.[Enter]:
+    > https://api.weibo.com/oauth2/authorize?client_id=3722953941&redirect_uri=http://www.baidu.com&response_type=code Hit enter when it's done.[Enter]:
 
 4. Meanwhile, your browser will open a page automatically. Here you enter your Weibo credentials and assign the permission. Then submit.
 5. The page will be redirected to `http://www.baidu.com/?code=873652da20697fdc137b6585e24cae05`. The copy the string after `code`, i.e., `873652da20697fdc137b6585e24cae05`, paste to the Eclipse console and press enter key.

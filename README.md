@@ -19,13 +19,13 @@ The `redirect_UIR` must be the one specified in the Weibo App
 2. Right click the file `examples\weibo4j\examples\oauth2\OAuth4Code.java`, choose `Run as Java Application...`.
 3. On the `Console` panel, the following line will be displayed:
 
-    > https://api.weibo.com/oauth2/authorize?client_id=3722953941&redirect_uri=http://www.baidu.com&response_type=code Hit enter when it's done.[Enter]:
+    https://api.weibo.com/oauth2/authorize?client_id=3722953941&redirect_uri=http://www.baidu.com&response_type=code Hit enter when it's done.[Enter]:
 
 4. Meanwhile, your browser will open a page automatically. Here you enter your Weibo credentials and assign the permission. Then submit.
 5. The page will be redirected to `http://www.baidu.com/?code=873652da20697fdc137b6585e24cae05`. The copy the string after `code`, i.e., `873652da20697fdc137b6585e24cae05`, paste to the Eclipse console and press enter key.
 6. An access token will be issued like:
 
-> AccessToken [accessToken=2.00oCIiNDN5IxDE78814a2afeBDSCHC, expireIn=157679999, refreshToken=,uid=2951008222]
+    AccessToken [accessToken=2.00oCIiNDN5IxDE78814a2afeBDSCHC, expireIn=157679999, refreshToken=,uid=2951008222]
 
 Then we get the access token to call Weibo APIs. This token expires in some time. And the API call rate is limited to the Weibo App type.
 

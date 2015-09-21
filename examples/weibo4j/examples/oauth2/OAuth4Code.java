@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import weibo4j.Oauth;
+import weibo4j.http.AccessToken;
 import weibo4j.model.WeiboException;
 import weibo4j.util.BareBonesBrowserLaunch;
+import weibo4j.wang.Constants;
+import weibo4j.wang.FileHandler;
 
 public class OAuth4Code {
-	public static void main(String [] args) throws WeiboException, IOException{
+	public static void main(String[] args) throws WeiboException, IOException {
 		Oauth oauth = new Oauth();
 		BareBonesBrowserLaunch.openURL(oauth.authorize("code"));
 		System.out.println(oauth.authorize("code"));
@@ -18,12 +21,15 @@ public class OAuth4Code {
 
 		String code = br.readLine();
 		Log.logInfo("code: " + code);
-		try{
-			System.out.println(oauth.getAccessTokenByCode(code));
+		try {
+			AccessToken token = oauth.getAccessTokenByCode(code);
+			System.out.println(token);
+			FileHandler.saveText2Txt(token.getAccessToken(),
+					Constants.TXTFILEPATH + "access-code.txt", true);
 		} catch (WeiboException e) {
-			if(401 == e.getStatusCode()){
+			if (401 == e.getStatusCode()) {
 				Log.logInfo("Unable to get the access token.");
-			}else{
+			} else {
 				e.printStackTrace();
 			}
 		}

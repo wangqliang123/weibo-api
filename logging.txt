@@ -1,5 +1,0 @@
------- 437/8897 Saving friends and followers of user: 1686300145 HKChannel-------
-Total # of followers of HKChannel: 252547
-next_cursor: 199
-pages/max_pages: 1/1270
-199 followers of user 1686300145 are got. Wait for 10 sec...

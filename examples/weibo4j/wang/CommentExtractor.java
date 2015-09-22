@@ -13,10 +13,10 @@ import weibo4j.wang.db.DataWrapper;
 
 public class CommentExtractor {
 
-	public static int PAGE_SIZE = 200;
-	public static int START_INDEX = 0;
-	public static int PAUSE_SECONDS_COMMENTS = 45;
-	public static int PAUSE_SECONDS_PAGING = 10;
+	public static int PAGE_SIZE = 200;				// Number of comments to be retrieved every page
+	public static int START_INDEX = 0;				// If last run you stop at 100, you can set it to be 100 for next run.
+	public static int PAUSE_SECONDS_COMMENTS = 45;	// Time in seconds to pause between retrieving comments of two consecutive weibos
+	public static int PAUSE_SECONDS_PAGING = 10;	// Time in seconds to pause between retrieving two pages of comments of the same weibo.
 
 	public static void main(String[] args) throws IOException {
 		CommentExtractor ec = new CommentExtractor();

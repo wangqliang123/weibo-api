@@ -16,7 +16,7 @@ public class Operations {
 			int count = s.executeUpdate(sql);
 			return (count > 0);
 		} catch (SQLException e) {
-			FileHandler.appText2File(weibo4j.wang.Constants.TXTFILEPATH + "log.txt", sql + "\n", false);
+			FileHandler.appText2File(weibo4j.wang.Constants.TXTFILEPATH + "failed-insertion-sql.txt", sql + "\n", false);
 			e.printStackTrace();
 			return false;
 		}

@@ -9,4 +9,4 @@ CREATE TABLE `Comment` (
   `userId` bigint(20) DEFAULT NULL,
   `statusId` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB

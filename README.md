@@ -1,5 +1,12 @@
 # weibo-api
 
+## Whenever error happens
+
+1. Failed insertion SQL statements are stored inside the file `file\txt\failed-insertion-sql.txt`.
+2. Those weibos whose comments are failed to be retrieved are stored in the file `\file\txt\weiboid_2000_error.txt`.
+
+> Note: please empty these two log files before a refresh run.
+
 ## Configure the App key and secret
 
 In the file `src/config.properties`, fill in the app key and secret:
@@ -33,11 +40,12 @@ The access token will be written to the file `file\txt\access-code.txt` automati
 
 Before you can grap the data, please configure your local database. Here we are using MySQL. Install MySQL and create a database name `sina_weibo`. Then create a table `comment` through the SQL statement defined in file `\file\sql\create_Comment.sql`.
 
+> **Important: in order to support Chinese characters, configure the collation to be `gbk - gbk_chinese_ci`. All columns inside the tables containing Chinese characters must be configured to be `gbk - gbk_chinese_ci` as well.**
+
 Inside the file `examples\weibo4j\wang\db\LocalDbConnection.java` Line 45, change your database username and password.
 
 1. Right click file `\examples\weibo4j\wang\CommentExtractor.java`, choose `Run as Java Application...`.
 2. On the Eclipse console it shows: `1 - Getting comments of ...`. Then it means the retrieval starts.
 
-If your program stops due to various reason, you can run the program again from where it stops last time. Change the value of `start` at Line 27.
+If your program stops due to various reason, you can run the program again from where it stops last time. Change the value of `START_INDEX` at Line 17.
 
-Those weibos whose comments are failed to be retrieved are stored in the file `\file\txt\weiboid_2000_error.txt`.

@@ -41,7 +41,7 @@ public class ModelFormatter {
 	public String rmQuote(String str) {
 		if (str == null || str.equals(""))
 			return "";
-		return str.replaceAll("'", "''");
+		return str.replaceAll("'", "").replaceAll("\\", "");
 	}
 
 	public String getUserInsSql(User user) {

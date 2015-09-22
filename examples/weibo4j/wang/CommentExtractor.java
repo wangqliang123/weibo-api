@@ -7,10 +7,14 @@ import weibo4j.Comments;
 import weibo4j.Weibo;
 import weibo4j.model.Comment;
 import weibo4j.model.CommentWapper;
+import weibo4j.model.Paging;
 import weibo4j.model.WeiboException;
 import weibo4j.wang.db.DataWrapper;
 
 public class CommentExtractor {
+
+	public static int PAGE_SIZE = 200;
+	public static int START_INDEX = 0;
 
 	public static void main(String[] args) throws IOException {
 		CommentExtractor ec = new CommentExtractor();
@@ -24,22 +28,22 @@ public class CommentExtractor {
 				+ "weiboid_2000.txt");
 
 		String ids[] = raw.split("\r\n");
-		int start = 0;
 		int count = 0;
 
 		for (String weiboId : ids) {
 			try {
-				P.p(count + " - Getting comments of " + weiboId + "\n");
-				if (count++ < start)
+				if (count++ < START_INDEX)
 					continue;
+				P.p(count + " - Getting comments of " + weiboId + "\n");
 				ec.readCommentsOfWeibo(weiboId, cm, dw);
-				Thread.sleep(15 * 1000);
+				Thread.sleep(20 * 1000);
 			} catch (Exception e1) {
 				FileHandler.appText2File(Constants.TXTFILEPATH
 						+ "weiboid_2000_error.txt", weiboId + "\r\n");
 				e1.printStackTrace();
 			}
 		}
+		P.pl("All Done.");
 	}
 
 	/**
@@ -49,14 +53,44 @@ public class CommentExtractor {
 	 * @param cm
 	 * @param dw
 	 * @throws WeiboException
+	 * @throws InterruptedException 
 	 */
 	public void readCommentsOfWeibo(String weiboId, Comments cm, DataWrapper dw)
-			throws WeiboException {
-		CommentWapper cw = cm.getCommentById(weiboId);
+			throws WeiboException, InterruptedException {
+		Paging pager = new Paging(1, PAGE_SIZE);
+		CommentWapper cw = readPagingCommentsOfWeibo(weiboId, pager, cm, dw);
+
+		if (cw.getTotalNumber() > PAGE_SIZE) {
+			int totalPages = (int) Math.ceil((cw.getTotalNumber() / PAGE_SIZE)) + 1;
+			P.pl("Total number: " + cw.getTotalNumber());
+			P.pl("Total pages: " + totalPages);
+
+			for (int i = 2; i <= totalPages; i++) {
+				P.pl("Querying page " + i + "...");
+				pager.setPage(i);
+				readPagingCommentsOfWeibo(weiboId, pager, cm, dw);
+				Thread.sleep(2 * 1000);
+			}
+		}
+	}
+
+	/**
+	 * Retrieve comments by page
+	 * @param weiboId
+	 * @param pager
+	 * @param cm
+	 * @param dw
+	 * @return
+	 * @throws WeiboException
+	 */
+	public CommentWapper readPagingCommentsOfWeibo(String weiboId,
+			Paging pager, Comments cm, DataWrapper dw) throws WeiboException {
+		CommentWapper cw = cm.getCommentById(weiboId, pager, 0);
 		List<Comment> comments = cw.getComments();
 		for (Comment c : comments) {
 			dw.saveComment(c);
 		}
+		return cw;
 	}
 
 	/**

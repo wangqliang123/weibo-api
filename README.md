@@ -4,6 +4,7 @@
 
 1. Failed insertion SQL statements are stored inside the file `file\txt\failed-insertion-sql.txt`.
 2. Those weibos whose comments are failed to be retrieved are stored in the file `\file\txt\weiboid_2000_error.txt`.
+3. Weibo API call details are stored inside file `weibo.log`. This file is in very detailed!
 
 > Note: please empty these two log files before a refresh run.
 

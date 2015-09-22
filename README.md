@@ -8,6 +8,15 @@
 
 > Note: please empty these two log files before a refresh run.
 
+## Configurations
+
+In file `\examples\weibo4j\wang\CommentExtractor.java` top lines:
+    
+    public static int PAGE_SIZE = 200;			// Number of comments to be retrieved every page
+	public static int START_INDEX = 0;				// If last run you stop at 100, you can set it to be 100 for next run.
+	public static int PAUSE_SECONDS_COMMENTS = 45;	// Time in seconds to pause between retrieving comments of two consecutive weibos
+	public static int PAUSE_SECONDS_PAGING = 10;	// Time in seconds to pause between retrieving two pages of comments of the same weibo.
+
 ## Configure the App key and secret
 
 In the file `src/config.properties`, fill in the app key and secret:

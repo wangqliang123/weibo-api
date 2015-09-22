@@ -15,6 +15,8 @@ public class CommentExtractor {
 
 	public static int PAGE_SIZE = 200;
 	public static int START_INDEX = 0;
+	public static int PAUSE_SECONDS_COMMENTS = 45;
+	public static int PAUSE_SECONDS_PAGING = 10;
 
 	public static void main(String[] args) throws IOException {
 		CommentExtractor ec = new CommentExtractor();
@@ -36,7 +38,7 @@ public class CommentExtractor {
 					continue;
 				P.p(count + " - Getting comments of " + weiboId + "\n");
 				ec.readCommentsOfWeibo(weiboId, cm, dw);
-				Thread.sleep(20 * 1000);
+				Thread.sleep(PAUSE_SECONDS_COMMENTS * 1000);
 			} catch (Exception e1) {
 				FileHandler.appText2File(Constants.TXTFILEPATH
 						+ "weiboid_2000_error.txt", weiboId + "\r\n");
@@ -69,7 +71,7 @@ public class CommentExtractor {
 				P.pl("Querying page " + i + "...");
 				pager.setPage(i);
 				readPagingCommentsOfWeibo(weiboId, pager, cm, dw);
-				Thread.sleep(2 * 1000);
+				Thread.sleep(PAUSE_SECONDS_PAGING * 1000);
 			}
 		}
 	}

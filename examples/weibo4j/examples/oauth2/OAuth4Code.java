@@ -10,29 +10,44 @@ import weibo4j.model.WeiboException;
 import weibo4j.util.BareBonesBrowserLaunch;
 import weibo4j.wang.Constants;
 import weibo4j.wang.FileHandler;
+import weibo4j.wang.WeiboAuthInfo;
 
 public class OAuth4Code {
-	public static void main(String[] args) throws WeiboException, IOException {
-		Oauth oauth = new Oauth();
-		BareBonesBrowserLaunch.openURL(oauth.authorize("code"));
-		System.out.println(oauth.authorize("code"));
-		System.out.print("Hit enter when it's done.[Enter]:");
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws WeiboException, IOException {
+        OAuth4Code o = new OAuth4Code();
+        String lines = FileHandler.readTXT(Constants.TXTFILEPATH + "weibo-auth-info.txt");
+        WeiboAuthInfo info;
+        String[] fields;
+        FileHandler.saveText2Txt("", Constants.TXTFILEPATH + "access-code.txt", true);
 
-		String code = br.readLine();
-		Log.logInfo("code: " + code);
-		try {
-			AccessToken token = oauth.getAccessTokenByCode(code);
-			System.out.println(token);
-			FileHandler.saveText2Txt(token.getAccessToken(),
-					Constants.TXTFILEPATH + "access-code.txt", true);
-		} catch (WeiboException e) {
-			if (401 == e.getStatusCode()) {
-				Log.logInfo("Unable to get the access token.");
-			} else {
-				e.printStackTrace();
-			}
-		}
-	}
+        for (String line : lines.split("\n")) {
+            line = line.trim();
+            fields = line.split(" ");
+            info = new WeiboAuthInfo(fields[0], fields[1], fields[2], "");
+            o.getAccessToken(info);
+            System.out.println("----------------------------");
+        }
+    }
+
+    public void getAccessToken(WeiboAuthInfo info) throws WeiboException, IOException {
+        Oauth oauth = new Oauth();
+        BareBonesBrowserLaunch.openURL(oauth.authorize(info, "code"));
+        System.out.print("Hit enter when it's done.[Enter]:");
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        String code = br.readLine();
+        System.out.println("code: " + code);
+        try {
+            String token = oauth.getAccessTokenByCode(info, code);
+            System.out.println(token);
+            FileHandler.appText2File(Constants.TXTFILEPATH + "access-code.txt", token + "\r\n");
+        } catch (WeiboException e) {
+            if (401 == e.getStatusCode()) {
+                Log.logInfo("Unable to get the access token.");
+            } else {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

@@ -56,12 +56,13 @@ public class CommentExtractor {
 				P.p(count + " - Getting comments of " + weiboId + "\n");
 				FileHandler.appText2File(Constants.TXTFILEPATH + "summary.txt",
 						"[" + ce.getCurrentTime() + "] [Weibo " + weiboId
-								+ "] - ");
+								+ "] " + count + " - ");
 				ce.readCommentsOfWeibo(weiboId, cm, dw);
 				Thread.sleep(PAUSE_SECONDS_COMMENTS * 1000);
 			} catch (Exception e1) {
 				FileHandler.appText2File(Constants.TXTFILEPATH
 						+ "weiboid_2000_error.txt", weiboId + "\r\n");
+				FileHandler.appText2File(Constants.TXTFILEPATH + "summary.txt", "\r\n");
 				e1.printStackTrace();
 				break;
 			}

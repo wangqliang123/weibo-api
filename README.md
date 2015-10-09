@@ -4,6 +4,7 @@
 
 1. Failed insertion SQL statements are stored inside the file `file\txt\failed-insertion-sql.txt`.
 2. Those weibos whose comments are failed to be retrieved are stored in the file `\file\txt\weiboid_2000_error.txt`.
+3. Those weibos with more than 2000 comments are listed in file `\file\txt\weibo-ids-with-more-than-2000-comments.txt`.
 3. Weibo API call details are stored inside file `weibo.log`. This file is in very detailed!
 
 A summary log file is stored in `file\txt\summary.txt`.
@@ -21,16 +22,18 @@ In file `\examples\weibo4j\wang\CommentExtractor.java` top lines:
 
 ## Configure the App key and secret
 
-In the file `src/config.properties`, fill in the app key and secret:
+In the file `src/config.properties`, fill in the common Weibo configurations:
 
-    client_ID=3722953941
-    client_SERCRET=47cf202ca308ad73869992e1b5230b60
-    redirect_URI=http://www.baidu.com
     baseURL=https://api.weibo.com/2/
     accessTokenURL=https://api.weibo.com/oauth2/access_token
     authorizeURL=https://api.weibo.com/oauth2/authorize
 
-The `redirect_UIR` must be the one specified in the Weibo App
+Whenever a "out of rate limit" error happens, the program will switch to another access code automatically. So, please provide a list of app key/client/redirect-uri values in file `\file\txt\weibo-auth-info.txt`. This file should be like:
+
+	2208476072 9bd6e9b16fee38f9065a2ad9c4d79727 http://www.baidu.com
+	3722953941 47cf202ca308ad73869992e1b5230b60 http://www.baidu.com
+
+Every line contains the information of some Weibo App. The three columns are App Key, App Secret and Redirect-URI respectively. NOTE: It is a *SINGLE SPACE* between the properties.
 
 ## Get the access token
 
@@ -45,8 +48,10 @@ The `redirect_UIR` must be the one specified in the Weibo App
 6. An access token will be issued like:
 
 	AccessToken [accessToken=2.00oCIiNDN5IxDE78814a2afeBDSCHC, expireIn=157679999, refreshToken=,uid=2951008222]
+7. If you provide multiple lines in the file `file\txt\weibo-auth-info.txt`, the process above will repeat for all lines.
 
-The access token will be written to the file `file\txt\access-code.txt` automatically.
+
+The access tokens will be written to the file `file\txt\access-code.txt` automatically.
 
 ## Grap Weibo comments data
 

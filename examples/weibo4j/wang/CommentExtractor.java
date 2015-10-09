@@ -3,6 +3,7 @@ package weibo4j.wang;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class CommentExtractor {
 	// Number of comments to be retrieved every page
 	public static int PAGE_SIZE = 200;
 	// If last run you stop at 100, you can set it to be 100 for next run.
-	public static int START_INDEX = 0;
+	public static int START_INDEX = 14;
 	// Seconds to pause between retrieving comments of two consecutive weibos
 	public static int PAUSE_SECONDS_COMMENTS = 45;
 	// Seconds to pause between retrieving two pages of comments
@@ -27,9 +28,14 @@ public class CommentExtractor {
 
 	public int counter = 0;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException,
+			InterruptedException {
+		int codeIndex = 0;
+
 		CommentExtractor ce = new CommentExtractor();
-		String access_token = ce.getAccessCode().trim();
+		ArrayList<String> codes = ce.getAccessCode();
+		String access_token = codes.get(codeIndex++);
+		P.pl("access_token: " + access_token);
 		Weibo weibo = new Weibo();
 		weibo.setToken(access_token);
 
@@ -59,12 +65,33 @@ public class CommentExtractor {
 								+ "] " + count + " - ");
 				ce.readCommentsOfWeibo(weiboId, cm, dw);
 				Thread.sleep(PAUSE_SECONDS_COMMENTS * 1000);
-			} catch (Exception e1) {
+			} catch (Exception e) {
 				FileHandler.appText2File(Constants.TXTFILEPATH
 						+ "weiboid_2000_error.txt", weiboId + "\r\n");
-				FileHandler.appText2File(Constants.TXTFILEPATH + "summary.txt", "\r\n");
-				e1.printStackTrace();
-				break;
+				FileHandler.appText2File(Constants.TXTFILEPATH + "summary.txt",
+						"\r\n");
+				e.printStackTrace();
+				P.pr(e.getMessage());
+				
+				if (e.getMessage().indexOf("User requests out of rate limit") >= 0
+						&& codeIndex < codes.size()) {
+					access_token = codes.get(codeIndex++);
+					weibo.setToken(access_token);
+					P.pr("\r\nRate out of limit: switching to a new access token "
+							+ access_token + " ...");
+					Thread.sleep(10 * 1000);
+				} else if (e
+						.getMessage()
+						.equals("A JSONObject text must begin with '{' at character 1:[]")) {
+					P.pr("More than 10 pages, skip");
+					FileHandler.appText2File(Constants.TXTFILEPATH
+							+ "summary.txt",
+							"Cannot retrieve comments out of page 10. \r\n");
+					FileHandler.appText2File(Constants.TXTFILEPATH
+							+ "weibo-ids-with-more-than-2000-comments.txt",
+							weiboId + "\r\n");
+				} else
+					break;
 			}
 		}
 		P.pl("All Done.");
@@ -134,14 +161,19 @@ public class CommentExtractor {
 	 * 
 	 * @return
 	 */
-	public String getAccessCode() {
+	public ArrayList<String> getAccessCode() {
+		ArrayList<String> codes = new ArrayList<String>();
 		try {
-			return FileHandler.readTXT(Constants.TXTFILEPATH
+			String raw = FileHandler.readTXT(Constants.TXTFILEPATH
 					+ "access-code.txt");
+			for (String line : raw.split("\r\n")) {
+				if (line.trim().length() > 5)
+					codes.add(line.trim());
+			}
 		} catch (IOException e) {
 			P.pr("Cannot read access token.");
 			e.printStackTrace();
-			return "";
 		}
+		return codes;
 	}
 }

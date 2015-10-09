@@ -9,6 +9,15 @@
 
 A summary log file is stored in `file\txt\summary.txt`.
 
+Before you kick start, you may want to run `examples\weibo4j\wang\ResetLogFiles.java` to clear these log files:
+
+ - failed-insertion-sql.txt
+ - summary.txt
+ - weiboid_2000_error.txt
+ - weibo-ids-with-more-than-2000-comments.txt
+ - ./weibo.log
+ - ./weibo.log.1
+
 > Note: please empty these two log files before a refresh run.
 
 ## Configurations
